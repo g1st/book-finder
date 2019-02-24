@@ -1,31 +1,22 @@
 import React from 'react';
 
+import SingleBook from './SingleBook';
+
 const BooksList = ({ data }) => {
   return data ? (
     <div>
-      <ul>
-        {data.map(book => {
-          // extract into its own component
-          return (
-            <li key={book.id}>
-              <h1>{book.title}</h1>
-              {book.authors.length <= 1 ? (
-                <h4>Author: {book.authors[0]}</h4>
-              ) : (
-                <h4>Authors: {book.authors.join(', ')}</h4>
-              )}
-              <h5>Published by: {book.publisher}</h5>
-              <img src={book.image || book.imageFallback} alt={book.title} />
-              <a
-                href={book.previewLink}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                More info
-              </a>
-            </li>
-          );
-        })}
+      <ul className="books-grid">
+        {data.map(book => (
+          <SingleBook
+            key={book.id}
+            id={book.id}
+            image={book.image || book.fallbackImage}
+            title={book.title}
+            authors={book.authors}
+            publisher={book.publisher}
+            link={book.previewLink}
+          />
+        ))}
       </ul>
     </div>
   ) : (
