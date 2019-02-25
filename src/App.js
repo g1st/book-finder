@@ -19,7 +19,7 @@ class App extends Component {
   };
 
   checkInput = input => {
-    if (input.length < 1) {
+    if (input.trim().length < 1) {
       this.setState({ error: 'Your input is empty.' });
       return true;
     }
@@ -55,8 +55,6 @@ class App extends Component {
       })
       .then(res => Promise.all(res.map(book => book.json())))
       .then(books => {
-        console.log(books);
-
         if (books.length < 1) throw Error('No books found.');
 
         this.setState({ loading: false });
@@ -66,13 +64,12 @@ class App extends Component {
           authors: book.volumeInfo.authors,
           publisher: book.volumeInfo.publisher,
           previewLink: book.volumeInfo.previewLink,
-          image: book.volumeInfo.imageLinks.small,
-          imageFallback: book.volumeInfo.imageLinks.thumbnail
+          image: book.volumeInfo.imageLinks && book.volumeInfo.imageLinks.small,
+          imageFallback:
+            book.volumeInfo.imageLinks && book.volumeInfo.imageLinks.thumbnail
         }));
       })
       .catch(err => {
-        console.log(err);
-
         this.setState({
           loading: false,
           error: err.message || 'Sorry we cannot process your request.'
@@ -125,30 +122,24 @@ class App extends Component {
 
   render() {
     const bookList = (
-      <div className="books-item">
+      <div className="books">
         {this.state.loading ? (
           <div>Loading...</div>
         ) : (
           <>
             <BooksList data={this.state.books} />
-            <div className="pagination">
+            <div className="books__pagination">
               {this.state.startIndex > 1 ? (
-                <span
-                  className="pagination-navigation"
-                  onClick={this.handlePreviousPage}
-                >
+                <span className="link" onClick={this.handlePreviousPage}>
                   Back
                 </span>
               ) : null}
               {this.state.books ? (
                 <>
-                  <span className="page">
+                  <span className="books__pagination--page">
                     Page {this.state.startIndex / 10 + 1}
                   </span>
-                  <span
-                    className="pagination-navigation"
-                    onClick={this.handleNextPage}
-                  >
+                  <span className="link" onClick={this.handleNextPage}>
                     Next
                   </span>
                 </>
@@ -163,18 +154,18 @@ class App extends Component {
 
     return (
       <div>
-        <main className="grid">
-          <div className="search-item">
-            <h1 className="heading">Book Finder</h1>
+        <main className="main">
+          <div>
+            <h1 className="logo">Book Finder</h1>
             <Search
               handleInput={this.handleInput}
               handleSubmit={this.handleSubmit}
             />
           </div>
           {this.state.error ? error : bookList}
-          <footer className="footer-item">
+          <footer className="footer">
             <a
-              className="footer-link"
+              className="link"
               href="http://github.com/g1st/book-finder"
               target="_blank"
               rel="noopener noreferrer"

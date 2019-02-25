@@ -1,23 +1,32 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import fallbackImg from '../../static/fallbackImage.jpg';
+
 const SingleBook = ({ image, title, authors, publisher, link }) => {
   return (
-    <li className="booksgrid-item">
-      <div className="image-item">
-        <img src={image || '../../static/fallbackImage.jpg'} alt={title} />
+    <li className="books__books-grid__item">
+      <div className="books__books-grid__item--image">
+        <img src={image || fallbackImg} alt={title} />
       </div>
-      <div className="bookinfo-item">
-        <h3 className="title">{title}</h3>
+      <div className="books__books-grid__item--bookinfo">
+        <h3 className="books__books-grid__item--title">{title}</h3>
         {authors.length <= 1 ? (
-          <h4 className="author">Author: {authors[0]}</h4>
+          <h4 className="books__books-grid__item--author">
+            Author: {authors[0]}
+          </h4>
         ) : (
-          <h4 className="author">Authors: {authors.join(', ')}</h4>
+          <h4 className="books__books-grid__item--author">
+            Authors: {authors.join(', ')}
+          </h4>
         )}
-        <h4 className="publisher">Published by: {publisher}</h4>
-        <div className="link">
+        <h4 className="books__books-grid__item--publisher">
+          Published by: {publisher}
+        </h4>
+        <div>
           <a
-            className="more-info"
+            className="link"
+            // className="more-info"
             href={link}
             target="_blank"
             rel="noopener noreferrer"
@@ -32,13 +41,12 @@ const SingleBook = ({ image, title, authors, publisher, link }) => {
 
 SingleBook.defaultProps = {
   authors: ['Not specified.'],
-  image: '../../static/fallbackImage.jpg',
   title: 'Missing title.',
   publisher: 'Missing publisher.'
 };
 
 SingleBook.propTypes = {
-  image: PropTypes.string.isRequired,
+  image: PropTypes.string,
   title: PropTypes.string.isRequired,
   authors: PropTypes.array.isRequired,
   publisher: PropTypes.string.isRequired,
